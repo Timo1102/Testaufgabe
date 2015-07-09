@@ -9,11 +9,18 @@ public class PlayerController : MonoBehaviour {
     public float rotateSpeed = 8.0f;
     public float ProjectilSpeed = 8.0f;
 
+
+
 	// Use this for initialization
 	void Start () {
-	    
+        SetPlayer(GameManager.instance.PlayerStartPosition);
 	}
 
+    public void SetPlayer(Vector3 position)
+    {
+        this.transform.position = position;
+        this.transform.rotation = Quaternion.identity;
+    }
 
     void FixedUpdate()
     {
@@ -34,10 +41,12 @@ public class PlayerController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("isHit" + other.name);
+        
         if(other.GetComponent<Bomb>())
         {
-            Destroy(this.gameObject);
+            Debug.Log("HIt: " + other.name);
+            GameManager.instance.SubLive();
+
         }
     }
 }

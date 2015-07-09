@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour {
         {
             Instantiate(PrefabBomb, this.transform.position, Quaternion.identity);
         }
-        Invoke("SpawnBomb", Random.Range(0.3f, 1.2f));
+        Invoke("SpawnBomb", SpawnTime());
     }
 
     void MoveIn()
@@ -54,13 +54,19 @@ public class Enemy : MonoBehaviour {
         if (this.transform.position == GameManager.instance.InnerCirclePosition)
         {
             isInCircle = true;
-            Invoke("SpawnBomb", 2f);
+            Invoke("SpawnBomb", SpawnTime());
         }
+    }
+
+    float SpawnTime()
+    {
+        return Random.Range(GameManager.instance.BombSpawnTime - 0.5f, GameManager.instance.BombSpawnTime + 0.5f);
     }
 
     void Hit()
     {
         GameManager.instance.AddPoints(Points);
+        GameManager.instance.EnemyDestroyed(this);
         Destroy(this.gameObject);
     }
 

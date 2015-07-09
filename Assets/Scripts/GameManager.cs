@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
     public PlayerController player;
+    public Vector3 PlayerStartPosition;
+
     public Enemy prefabEnemy;
 
     public List<Enemy> activeEnemys = new List<Enemy>();
@@ -14,11 +16,16 @@ public class GameManager : MonoBehaviour {
 
     public Vector3 InnerCirclePosition;
 
+    public int EnemysAtStart = 2;
+    int RoundCount = 0;
+
+
     //Enemy Settings
     public int EnemyMoveInSpeed;
     public int EnemySpeed;
     public int BombSpeed;
     public float defaultBombSpawnTime;
+    public float BombSpawnTime;
 
 
     bool _isPlay;
@@ -76,12 +83,20 @@ public class GameManager : MonoBehaviour {
         
     }
 
-    void SpawnEnemy()
+    IEnumerator SpawnEnemy()
     {
+        RoundCount++;
         int rnd = (int)Random.Range(0, SpawnPoints.Count);
         Transform position = SpawnPoints[rnd];
+        for(int i = 0;i<EnemysAtStart; i++)
+        {
+
+        
+
         Enemy enemyPrefab = Instantiate(prefabEnemy, position.position, Quaternion.identity) as Enemy;
         enemyPrefab.Init(EnemyMoveInSpeed, EnemySpeed, position.position.x < 0 ? 1 : -1);
+        yield return new WaitForSeconds(0.1f);
+        }
     }
 
     void Update()
@@ -94,7 +109,31 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
+        BombSpawnTime = defaultBombSpawnTime;
         _lives = StartLives;
+        Play();
+        Next();
+    }
+
+    void Next()
+    {
+        if(RoundCount == EnemysAtStart)
+        {
+            EnemysAtStart++;
+            RoundCount = 0;
+            BombSpawnTime = defaultBombSpawnTime;
+        }
+        BombSpawnTime -= 0.2f;
+        StartCoroutine("SpawnEnemy");
+    }
+
+    public void EnemyDestroyed(Enemy enemy)
+    {
+        activeEnemys.Remove(enemy);
+        if(activeEnemys.Count == 0)
+        {
+            Next();
+        }
     }
 
    public void AddPoints(int points)
@@ -108,8 +147,13 @@ public class GameManager : MonoBehaviour {
         if(_lives == 0)
         {
             GameOver();
+        }else
+        {
+            player.SetPlayer(PlayerStartPosition);
         }
     }
+
+
 
     void GameOver()
     {
@@ -126,6 +170,7 @@ public class GameManager : MonoBehaviour {
     {
         _isPlay = true;
         _isPause = false;
+        
     }
 
 
