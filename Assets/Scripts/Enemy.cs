@@ -28,6 +28,9 @@ public class Enemy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        if (!GameManager.instance.IsPlay)
+            return;
+
 	    if(!isInCircle)
         {
             MoveIn();
