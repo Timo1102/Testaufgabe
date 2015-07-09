@@ -31,4 +31,13 @@ public class PlayerController : MonoBehaviour {
 
 
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("isHit" + other.name);
+        if(other.GetComponent<Bomb>())
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }

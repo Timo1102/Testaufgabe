@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
-    public GameObject Bomb;
+    public GameObject PrefabBomb;
 
     bool isInCircle = false;
     public int Points;
@@ -41,7 +41,11 @@ public class Enemy : MonoBehaviour {
 
     void SpawnBomb()
     {
-
+        if (isInCircle)
+        {
+            Instantiate(PrefabBomb, this.transform.position, Quaternion.identity);
+        }
+        Invoke("SpawnBomb", Random.Range(0.3f, 1.2f));
     }
 
     void MoveIn()
@@ -50,7 +54,7 @@ public class Enemy : MonoBehaviour {
         if (this.transform.position == GameManager.instance.InnerCirclePosition)
         {
             isInCircle = true;
-           
+            Invoke("SpawnBomb", 2f);
         }
     }
 

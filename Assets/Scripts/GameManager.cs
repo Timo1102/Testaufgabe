@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour {
     public int EnemyMoveInSpeed;
     public int EnemySpeed;
     public int BombSpeed;
+    public float defaultBombSpawnTime;
+
 
     bool _isPlay;
     public bool IsPlay

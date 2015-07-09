@@ -13,7 +13,7 @@ public class Bomb : MonoBehaviour {
         this.Speed = GameManager.instance.BombSpeed;
 	}
 
-
+    
 	
 	// Update is called once per frame
 	void Update () {
@@ -23,6 +23,7 @@ public class Bomb : MonoBehaviour {
             Destroy(this.gameObject);
         }else
         {
+            
             this.transform.position = Vector3.MoveTowards(this.transform.position, end, Speed * Time.deltaTime);
         }
 
