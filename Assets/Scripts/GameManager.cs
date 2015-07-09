@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
-    
+    public PlayerController player;
 
 
 
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public int StartLives;
     int _lives;
     public int Lives
     {
@@ -63,12 +64,17 @@ public class GameManager : MonoBehaviour {
         
     }
 
-    void AddPoints(int points)
+    void Start()
+    {
+        _lives = StartLives;
+    }
+
+   public void AddPoints(int points)
     {
         this._points += points;
     }
 
-    void SubLive()
+   public void SubLive()
     {
         this._lives -= 1;
         if(_lives == 0)
@@ -82,13 +88,13 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    void Pause()
+    public void Pause()
     {
         _isPlay = false;
         _isPause = true;
     }
 
-    void Play()
+    public void Play()
     {
         _isPlay = true;
         _isPause = false;
