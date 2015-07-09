@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
+    public GameObject Bomb;
+
     bool isInCircle = false;
     public int Points;
 
@@ -36,6 +38,11 @@ public class Enemy : MonoBehaviour {
 
 
 	}
+
+    void SpawnBomb()
+    {
+
+    }
 
     void MoveIn()
     {

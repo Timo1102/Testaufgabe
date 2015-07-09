@@ -14,9 +14,10 @@ public class GameManager : MonoBehaviour {
 
     public Vector3 InnerCirclePosition;
 
-
+    //Enemy Settings
     public int EnemyMoveInSpeed;
     public int EnemySpeed;
+    public int BombSpeed;
 
     bool _isPlay;
     public bool IsPlay
