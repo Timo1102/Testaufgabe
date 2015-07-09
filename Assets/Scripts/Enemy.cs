@@ -4,7 +4,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
     bool isInCircle = false;
-
+    public int Points;
 
     int MoveInSpeed, Speed, CircleDirection;
 	// Use this for initialization
@@ -46,4 +46,20 @@ public class Enemy : MonoBehaviour {
            
         }
     }
+
+    void Hit()
+    {
+        GameManager.instance.AddPoints(Points);
+        Destroy(this.gameObject);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.GetComponent<Projectil>())
+        {
+            Hit();
+            Destroy(other.gameObject);
+        }
+    }
+
 }
