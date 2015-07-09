@@ -4,22 +4,26 @@ using System.Collections;
 
 public class GameOver : InterfaceBase {
 
-    public Animator ContentAnimation;
+    public GameObject Content;
 
     public GameObject PointText;
     public GameObject HighScoreText;
 
     public GameObject Name;
 
+
+   
     void OnEnable()
     {
         PointText.GetComponent<Text>().text = GameManager.instance.Points.ToString();
+        Content.transform.localPosition = new Vector3(0, 0, 0);
+        
+
     }
 
     public void SetHighScore()
     {
-        ContentAnimation.SetBool("Swipe", true);
-
+        Content.transform.localPosition = new Vector3(560, 0, 0);
         GameManager.instance.AddScore(Name.GetComponent<Text>().text, GameManager.instance.Points);
         ShowHighscore();
     }
@@ -34,6 +38,8 @@ public class GameOver : InterfaceBase {
 
         
     }
+
+
 
 
 }

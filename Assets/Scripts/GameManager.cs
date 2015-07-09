@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     public Vector3 InnerCirclePosition;
 
     public int EnemysAtStart = 2;
+    int nextEnemys = 0;
     int RoundCount = 0;
 
     public ParticleSystem Background;
@@ -57,7 +58,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    bool _isPause;
+   private bool _isPause;
+    
+     
     public bool IsPause
     {
         get
@@ -67,12 +70,17 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    int _points = 0;
+    int _points;
     public int Points
     {
         get
         {
             return _points;
+        }
+        private set
+        {
+            _points = value;
+            UI.InGame.GetComponent<InGame>().UpdatePoints();
         }
     }
 
@@ -83,6 +91,11 @@ public class GameManager : MonoBehaviour {
         get
         {
             return _lives;
+        }
+        private set
+        {
+            _lives = value;
+            UI.InGame.UpdateLives();
         }
     }
 
@@ -109,7 +122,7 @@ public class GameManager : MonoBehaviour {
         RoundCount++;
         int rnd = (int)Random.Range(0, SpawnPoints.Count);
         Transform position = SpawnPoints[rnd];
-        for(int i = 0;i<EnemysAtStart; i++)
+        for(int i = 0;i<nextEnemys; i++)
         {
 
         
@@ -130,13 +143,20 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
-        BombSpawnTime = defaultBombSpawnTime;
-        _lives = StartLives;
+        GameInit();
         Pause();
       //  Play();
        // Next();
     }
 
+    void GameInit()
+    {
+        BombSpawnTime = defaultBombSpawnTime;
+        Lives = StartLives;
+        nextEnemys = EnemysAtStart;
+        RoundCount = 0;
+        activeEnemys.Clear();
+    }
 
     void LoadSaveGame()
     {
@@ -198,9 +218,9 @@ public class GameManager : MonoBehaviour {
 
     void Next()
     {
-        if(RoundCount == EnemysAtStart)
+        if(RoundCount == nextEnemys)
         {
-            EnemysAtStart++;
+            nextEnemys++;
             RoundCount = 0;
             BombSpawnTime = defaultBombSpawnTime;
         }
@@ -243,6 +263,26 @@ public class GameManager : MonoBehaviour {
         Pause();
         UI.InGame.enable(false);
         UI.GameOver.enable(true);
+    }
+
+    public void Restart()
+    {
+        foreach(Enemy item in activeEnemys)
+        {
+            Destroy(item.gameObject);
+        }
+        foreach(Bomb item in GameObject.FindObjectsOfType<Bomb>())
+        {
+            Destroy(item.gameObject);
+        }
+
+        GameInit();
+        Points = 0;
+        player.SetPlayer(PlayerStartPosition);
+        UI.GameOver.enable(false);
+        UI.StartScreen.enable(true);
+
+        
     }
 
     public void Pause()

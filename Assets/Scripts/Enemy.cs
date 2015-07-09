@@ -44,9 +44,12 @@ public class Enemy : MonoBehaviour {
 
     void SpawnBomb()
     {
+        if(GameManager.instance.IsPlay)
+        {
         if (isInCircle)
         {
             Instantiate(PrefabBomb, this.transform.position, Quaternion.identity);
+        }
         }
         Invoke("SpawnBomb", SpawnTime());
     }
