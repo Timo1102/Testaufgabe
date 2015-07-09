@@ -60,7 +60,11 @@ public class Enemy : MonoBehaviour {
 
     float SpawnTime()
     {
-        return Random.Range(GameManager.instance.BombSpawnTime - 0.5f, GameManager.instance.BombSpawnTime + 0.5f);
+        float min = Mathf.Max(0.1f, GameManager.instance.BombSpawnTime - 0.5f);
+        float max = Mathf.Max(0.1f, GameManager.instance.BombSpawnTime + 0.5f);
+
+
+        return Random.Range(min, max);
     }
 
     void Hit()
