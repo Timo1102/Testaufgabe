@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
     public PlayerController player;
+    public Enemy prefabEnemy;
 
-
+    public List<Enemy> activeEnemys = new List<Enemy>();
+    public List<Transform> SpawnPoints = new List<Transform>();
 
     bool _isPlay;
     public bool IsPlay
@@ -63,6 +66,12 @@ public class GameManager : MonoBehaviour {
         }
         
     }
+
+    void SpawnEnemy()
+    {
+
+    }
+
 
     void Start()
     {
