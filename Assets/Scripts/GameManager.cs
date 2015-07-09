@@ -12,6 +12,12 @@ public class GameManager : MonoBehaviour {
     public List<Enemy> activeEnemys = new List<Enemy>();
     public List<Transform> SpawnPoints = new List<Transform>();
 
+    public Vector3 InnerCirclePosition;
+
+
+    public int EnemyMoveInSpeed;
+    public int EnemySpeed;
+
     bool _isPlay;
     public bool IsPlay
     {
@@ -69,9 +75,19 @@ public class GameManager : MonoBehaviour {
 
     void SpawnEnemy()
     {
-
+        int rnd = (int)Random.Range(0, SpawnPoints.Count);
+        Transform position = SpawnPoints[rnd];
+        Enemy enemyPrefab = Instantiate(prefabEnemy, position.position, Quaternion.identity) as Enemy;
+        enemyPrefab.Init(EnemyMoveInSpeed, EnemySpeed, position.position.x < 0 ? 1 : -1);
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            SpawnEnemy();
+        }
+    }
 
     void Start()
     {

@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        transform.RotateAround(Vector3.zero, Vector3.forward, rotateSpeed * Input.GetAxis("Horizontal"));
+        transform.RotateAround(Vector3.zero, Vector3.forward, rotateSpeed * Input.GetAxis("Horizontal") * Time.deltaTime);
     }
 	
 	// Update is called once per frame
