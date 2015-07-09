@@ -5,7 +5,7 @@ public class UIManager : MonoBehaviour {
 
     public InGame InGame;
     public InterfaceBase StartScreen;
-
+    public GameOver GameOver;
 
 
 

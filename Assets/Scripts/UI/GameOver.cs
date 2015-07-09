@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class GameOver : MonoBehaviour {
+public class GameOver : InterfaceBase {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public Animator ContentAnimation;
+
+    public GameObject PointText;
+
+    public GameObject Name;
+
+    void OnEnable()
+    {
+        PointText.GetComponent<Text>().text = GameManager.instance.Points.ToString();
+    }
+
+    public void SetHighScore()
+    {
+        ContentAnimation.SetBool("Swipe", true);
+    }
+
+
 }

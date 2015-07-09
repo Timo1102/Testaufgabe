@@ -22,13 +22,16 @@ public class PlayerController : MonoBehaviour {
         this.transform.rotation = Quaternion.identity;
     }
 
-    void FixedUpdate()
-    {
-        transform.RotateAround(Vector3.zero, Vector3.forward, rotateSpeed * Input.GetAxis("Horizontal") * Time.deltaTime);
-    }
+
 	
 	// Update is called once per frame
 	void Update () {
+        if (!GameManager.instance.IsPlay)
+            return;
+
+        transform.RotateAround(Vector3.zero, Vector3.forward, rotateSpeed * Input.GetAxis("Horizontal") * Time.deltaTime);
+    
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
            var prefab = Instantiate(Projectil, this.transform.position, Quaternion.identity) as GameObject;

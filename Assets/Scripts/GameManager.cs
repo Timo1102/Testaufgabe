@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
+    public UIManager UI;
     public PlayerController player;
     public Vector3 PlayerStartPosition;
 
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour {
 
     public int EnemysAtStart = 2;
     int RoundCount = 0;
+
+    public ParticleSystem Background;
 
 
     //Enemy Settings
@@ -47,7 +50,7 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    int _points;
+    int _points = 0;
     public int Points
     {
         get
@@ -103,7 +106,7 @@ public class GameManager : MonoBehaviour {
     {
         if(Input.GetKeyDown(KeyCode.K))
         {
-            SpawnEnemy();
+            Pause();
         }
     }
 
@@ -111,8 +114,17 @@ public class GameManager : MonoBehaviour {
     {
         BombSpawnTime = defaultBombSpawnTime;
         _lives = StartLives;
-        Play();
+        Pause();
+      //  Play();
+       // Next();
+    }
+
+    public void StartGame()
+    {
         Next();
+        Play();
+        UI.StartScreen.enable(false);
+        UI.InGame.enable(true);
     }
 
     void Next()
@@ -139,11 +151,13 @@ public class GameManager : MonoBehaviour {
    public void AddPoints(int points)
     {
         this._points += points;
+        UI.InGame.GetComponent<InGame>().UpdatePoints();
     }
 
    public void SubLive()
     {
         this._lives -= 1;
+        UI.InGame.GetComponent<InGame>().UpdateLives();
         if(_lives == 0)
         {
             GameOver();
@@ -157,17 +171,21 @@ public class GameManager : MonoBehaviour {
 
     void GameOver()
     {
-
+        Pause();
+        UI.InGame.enable(false);
+        UI.GameOver.enable(true);
     }
 
     public void Pause()
     {
+        Background.Pause();
         _isPlay = false;
         _isPause = true;
     }
 
     public void Play()
     {
+        Background.Play();
         _isPlay = true;
         _isPause = false;
         

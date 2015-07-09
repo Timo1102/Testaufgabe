@@ -9,7 +9,9 @@ public class Projectil : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-      
+        if (!GameManager.instance.IsPlay)
+            return;
+
         if (this.transform.position != Vector3.zero)
         {
             this.transform.position = Vector3.MoveTowards(this.transform.position, Vector3.zero, speed * Time.deltaTime);
