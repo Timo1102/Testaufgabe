@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Interface Base Class
 public class InterfaceBase : MonoBehaviour {
 
 

@@ -11,11 +11,12 @@ public class PlayerController : MonoBehaviour {
 
 
 
-	// Use this for initialization
+	// Set Player Position
 	void Start () {
         SetPlayer(GameManager.instance.PlayerStartPosition);
 	}
 
+    
     public void SetPlayer(Vector3 position)
     {
         this.transform.position = position;
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour {
 
 
 	
-	// Update is called once per frame
+	//Rotate around center by hitting Left, Richt, A, D. Press Space to shoot
 	void Update () {
         if (!GameManager.instance.IsPlay)
             return;
@@ -42,12 +43,12 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
+    //if collide with a bomb
     void OnTriggerEnter(Collider other)
     {
         
         if(other.GetComponent<Bomb>())
         {
-            Debug.Log("HIt: " + other.name);
             GameManager.instance.SubLive();
 
         }

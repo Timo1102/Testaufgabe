@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour {
         GameManager.instance.activeEnemys.Add(this);
     }
 
+    //Init the Enemy, set Speed, direction
     public void Init(int MoveInSpeed, int Speed, int CircleDirection)
     {
         this.MoveInSpeed = MoveInSpeed;
@@ -26,7 +27,7 @@ public class Enemy : MonoBehaviour {
         this.CircleDirection = CircleDirection;
     }
 
-	// Update is called once per frame
+	//Move to the circle, and then move in the Circle
 	void Update () {
         if (!GameManager.instance.IsPlay)
             return;
@@ -42,6 +43,7 @@ public class Enemy : MonoBehaviour {
 
 	}
 
+    //Spawn bomb
     void SpawnBomb()
     {
         if(GameManager.instance.IsPlay)
@@ -54,6 +56,7 @@ public class Enemy : MonoBehaviour {
         Invoke("SpawnBomb", SpawnTime());
     }
 
+    //Move from SpawnPoint to Cirlce Position
     void MoveIn()
     {
         transform.position = Vector3.MoveTowards(this.transform.position, GameManager.instance.InnerCirclePosition, MoveInSpeed * Time.deltaTime);
@@ -64,6 +67,7 @@ public class Enemy : MonoBehaviour {
         }
     }
 
+    //Calculate the time by bombSpawnTime + a range of 0.5 seconds
     float SpawnTime()
     {
         float min = Mathf.Max(0.1f, GameManager.instance.BombSpawnTime - 0.5f);
@@ -73,6 +77,7 @@ public class Enemy : MonoBehaviour {
         return Random.Range(min, max);
     }
 
+    //Destroy if hit by a Projectile
     void Hit()
     {
         GameManager.instance.AddPoints(Points);

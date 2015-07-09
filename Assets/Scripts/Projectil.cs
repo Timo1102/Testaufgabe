@@ -4,10 +4,10 @@ using System.Collections;
 public class Projectil : MonoBehaviour {
 
     public float speed;
-	// Use this for initialization
+	
 
 	
-	// Update is called once per frame
+	//Move to the center of the screen
 	void Update () {
         if (!GameManager.instance.IsPlay)
             return;

@@ -5,7 +5,9 @@ public class Bomb : MonoBehaviour {
 
     public Vector3 end;
     int Speed;
-	// Use this for initialization
+	
+
+    //Calculate the way to the border of the Screen from the middle of the screen
 	void Start () {
         Vector3 direction = Vector3.zero - this.transform.position;
         direction.Normalize();
@@ -15,7 +17,7 @@ public class Bomb : MonoBehaviour {
 
     
 	
-	// Update is called once per frame
+	//Destroy when the gameobject are not visible for the main camera
 	void Update () {
         if (!GameManager.instance.IsPlay)
             return;
@@ -25,7 +27,6 @@ public class Bomb : MonoBehaviour {
             Destroy(this.gameObject);
         }else
         {
-            
             this.transform.position = Vector3.MoveTowards(this.transform.position, end, Speed * Time.deltaTime);
         }
 

@@ -12,7 +12,7 @@ public class GameOver : InterfaceBase {
     public GameObject Name;
 
 
-   
+   //Show Points
     void OnEnable()
     {
         PointText.GetComponent<Text>().text = GameManager.instance.Points.ToString();
@@ -20,7 +20,7 @@ public class GameOver : InterfaceBase {
         
 
     }
-
+    //Set Hightscore and save Points
     public void SetHighScore()
     {
         Content.transform.localPosition = new Vector3(560, 0, 0);
@@ -28,6 +28,7 @@ public class GameOver : InterfaceBase {
         ShowHighscore();
     }
 
+    //Show the Highscore Screen
     void ShowHighscore()
     {
         HighScoreText.GetComponent<Text>().text = "";

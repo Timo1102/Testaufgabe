@@ -5,25 +5,37 @@ using System.IO;
 
 public class GameManager : MonoBehaviour {
 
+    //GameManager instance
     public static GameManager instance;
 
+    //UIManager
     public UIManager UI;
+    //Controll the Ship
     public PlayerController player;
+    //Start Position
     public Vector3 PlayerStartPosition;
 
     public Enemy prefabEnemy;
 
+    //Alls Enemys on the Screen
     public List<Enemy> activeEnemys = new List<Enemy>();
+    //List of SpawnPoints where Enemys can Spawn
     public List<Transform> SpawnPoints = new List<Transform>();
 
+    //Position of the Circle for the Enemys
     public Vector3 InnerCirclePosition;
 
+    //NumberOf Enemys at Start
     public int EnemysAtStart = 2;
+    //NumberOf Enemys in the NextRound
     int nextEnemys = 0;
+    //Need to Calculate Next Enemys
     int RoundCount = 0;
 
+    
     public ParticleSystem Background;
 
+    //Score Class to store the Name with Points
     public class Score
     {
         public Score(string name, int score)
@@ -36,19 +48,25 @@ public class GameManager : MonoBehaviour {
         public int Points;
     }
 
-
+    //List of all saved Scores
     public List<Score> Highscore = new List<Score>();
 
+    
     TextAsset savegame;
 
     //Enemy Settings
+    //Enemys Move Speed from SpawnPoint to the circle
     public int EnemyMoveInSpeed;
+    //Enemys Speed in the Circle
     public int EnemySpeed;
+    
     public int BombSpeed;
+    //Bomb Spawn Time at Start
     public float defaultBombSpawnTime;
+    //actual Bomb spawn time
     public float BombSpawnTime;
 
-
+    //true, if the game is run
     bool _isPlay;
     public bool IsPlay
     {
@@ -58,6 +76,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    //true, if the game is pause
    private bool _isPause;
     
      
@@ -69,7 +88,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-
+    
     int _points;
     public int Points
     {
@@ -84,6 +103,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    //Start Lives
     public int StartLives;
     int _lives;
     public int Lives
@@ -113,10 +133,12 @@ public class GameManager : MonoBehaviour {
             if (this != instance)
                 Destroy(this.gameObject);
         }
-
+        //Load SaveGame
         LoadSaveGame();
     }
 
+    //Spawn Enemys, when all active Enemys are Destroyed
+    //Spawn rate is roundbased ( 2 x 2, 3 x 3, ... )
     IEnumerator SpawnEnemy()
     {
         RoundCount++;
@@ -124,22 +146,13 @@ public class GameManager : MonoBehaviour {
         Transform position = SpawnPoints[rnd];
         for(int i = 0;i<nextEnemys; i++)
         {
-
-        
-
         Enemy enemyPrefab = Instantiate(prefabEnemy, position.position, Quaternion.identity) as Enemy;
         enemyPrefab.Init(EnemyMoveInSpeed, EnemySpeed, position.position.x < 0 ? 1 : -1);
         yield return new WaitForSeconds(0.1f);
         }
     }
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            Pause();
-        }
-    }
+
 
     void Start()
     {
@@ -149,6 +162,7 @@ public class GameManager : MonoBehaviour {
        // Next();
     }
 
+    //Set all Init Game states
     void GameInit()
     {
         BombSpawnTime = defaultBombSpawnTime;
@@ -158,6 +172,8 @@ public class GameManager : MonoBehaviour {
         activeEnemys.Clear();
     }
 
+    //Load Save game
+    //Savegame is store in "Assets/Resources"
     void LoadSaveGame()
     {
         savegame = Resources.Load("save") as TextAsset;
@@ -175,7 +191,7 @@ public class GameManager : MonoBehaviour {
 
 
     }
-
+    //Saved savegame
     void SaveSaveGame()
     {
          savegame = Resources.Load("save") as TextAsset;
@@ -192,6 +208,7 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    //Add new score, sort and Save
     public void AddScore(string name, int Score)
     {
         Highscore.Add(new Score(name, Score));
@@ -207,7 +224,7 @@ public class GameManager : MonoBehaviour {
 
         
     }
-
+    //StartGame
     public void StartGame()
     {
         Next();
@@ -216,6 +233,7 @@ public class GameManager : MonoBehaviour {
         UI.InGame.enable(true);
     }
 
+    //Next Round
     void Next()
     {
         if(RoundCount == nextEnemys)
@@ -228,6 +246,8 @@ public class GameManager : MonoBehaviour {
         StartCoroutine("SpawnEnemy");
     }
 
+    //is called, when a enemy is destroyed,
+    //if all active are destroyed, start NextRound
     public void EnemyDestroyed(Enemy enemy)
     {
         activeEnemys.Remove(enemy);
@@ -237,12 +257,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    //Add Points and update the UI
    public void AddPoints(int points)
     {
         this._points += points;
         UI.InGame.GetComponent<InGame>().UpdatePoints();
     }
-
+    //Subtract one Live and update the UI,
+    //If zero lives, player is GameOver
    public void SubLive()
     {
         this._lives -= 1;
@@ -257,7 +279,7 @@ public class GameManager : MonoBehaviour {
     }
 
 
-
+    //Start GameOver UI and Pause the Game
     void GameOver()
     {
         Pause();
@@ -265,6 +287,7 @@ public class GameManager : MonoBehaviour {
         UI.GameOver.enable(true);
     }
 
+    //Reset all Game Settings and Show the StartScreen
     public void Restart()
     {
         foreach(Enemy item in activeEnemys)
