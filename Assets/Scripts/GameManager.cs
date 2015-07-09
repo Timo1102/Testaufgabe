@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class GameManager : MonoBehaviour {
 
@@ -22,6 +23,22 @@ public class GameManager : MonoBehaviour {
 
     public ParticleSystem Background;
 
+    public class Score
+    {
+        public Score(string name, int score)
+        {
+            this.Name = name;
+            this.Points = score;
+        }
+
+        public string Name;
+        public int Points;
+    }
+
+
+    public List<Score> Highscore = new List<Score>();
+
+    TextAsset savegame;
 
     //Enemy Settings
     public int EnemyMoveInSpeed;
@@ -83,7 +100,8 @@ public class GameManager : MonoBehaviour {
             if (this != instance)
                 Destroy(this.gameObject);
         }
-        
+
+        LoadSaveGame();
     }
 
     IEnumerator SpawnEnemy()
@@ -117,6 +135,57 @@ public class GameManager : MonoBehaviour {
         Pause();
       //  Play();
        // Next();
+    }
+
+
+    void LoadSaveGame()
+    {
+        savegame = Resources.Load("save") as TextAsset;
+        string[] lines = savegame.text.Split("\n"[0]);
+        foreach (string line in lines)
+        {
+            if(line != "")
+            {
+
+            
+            string[] split = line.Split("-"[0]);
+            Highscore.Add(new Score(split[0], int.Parse(split[1])));
+            }
+        }
+
+
+    }
+
+    void SaveSaveGame()
+    {
+         savegame = Resources.Load("save") as TextAsset;
+         StreamWriter sw = new StreamWriter("Assets/Resources/save.txt");
+        
+        foreach(Score item in Highscore)
+        {
+            sw.WriteLine(item.Name + " - " + item.Points);
+        }
+
+        sw.Flush();
+        sw.Close();
+
+
+    }
+
+    public void AddScore(string name, int Score)
+    {
+        Highscore.Add(new Score(name, Score));
+
+        Highscore.Sort(
+            delegate(Score x, Score y)
+            {
+                return y.Points.CompareTo(x.Points);
+            }
+            );
+        SaveSaveGame();
+        
+
+        
     }
 
     public void StartGame()
